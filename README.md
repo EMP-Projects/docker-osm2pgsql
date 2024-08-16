@@ -35,8 +35,6 @@ osm2pg-db:
       retries: 3
       start_period: 1m
     restart: on-failure
-    networks:
-      - ecosensor-network
     volumes:
       - ./osm-data/db:/var/lib/postgresql
   
