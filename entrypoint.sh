@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $# -ne 5 ]
+if [ $# -ne 6 ]
 then
     echo "Uso: $0 PGHOST PGPORT PGUSER PGPWD PGDB"
     exit

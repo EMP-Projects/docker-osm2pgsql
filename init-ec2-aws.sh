@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sudo add-apt-repository ppa:ubuntugis/ppa
 sudo apt update
 sudo apt -y install git cmake make g++ libboost-dev libbz2-dev zlib1g-dev libpq-dev libproj-dev \
     lua5.3 liblua5.3-dev libgeos-dev libgeos++-dev libprotobuf-c-dev \
@@ -9,6 +10,7 @@ sudo apt -y install git cmake make g++ libboost-dev libbz2-dev zlib1g-dev libpq-
     libpng-dev libtiff-dev libicu-dev libproj-dev libxml2-dev libzip-dev \
     python3 python3-pip python3-venv nlohmann-json \
     boost expat bzip2 zlib libpq proj lua5.3 luajit potrace opencv lz4-libs 
+sudo apt -y install gdal-bin python3 python3-venv python3-pip python3-dev libpq-dev 
 
 git clone git clone -b 1.10.0 https://github.com/osm2pgsql-dev/osm2pgsql.git $HOME/osm2pgsql
 cd $HOME/osm2pgsql
