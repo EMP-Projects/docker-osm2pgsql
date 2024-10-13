@@ -1,5 +1,18 @@
 #!/bin/sh
 
+if [ $# -ne 5 ]
+then
+    echo "Uso: $0 PGHOST PGPORT PGUSER PGPWD PGDB"
+    exit
+fi 
+
+# assegna i valori degli argomenti alle variabili
+PGHOST=$1
+PGPORT=$2
+PGUSER=$3
+PGPWD=$4
+PGDB=$5
+
 echo DATADIR="${DATADIR:="/osm"}"
 echo PBF="${PBF:=$DATADIR/italy-latest.osm.pbf}"
 
@@ -25,11 +38,11 @@ if psql --no-password -h "$PGHOST" -U "$PGUSER" -d "$PGDATABASE" -p 5433 -c "sel
 else
     echo "Database not ready, need to initialize. Creating extensions ..."
 
-    psql --no-password -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -p 5433 -c "CREATE EXTENSION IF NOT EXISTS postgis;"
-    psql --no-password -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -p 5433 -c "CREATE EXTENSION IF NOT EXISTS hstore;"
-    psql --no-password -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -p 5433 -c "CREATE EXTENSION IF NOT EXISTS pgrouting;"
-    psql --no-password -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -p 5433 -c "CREATE EXTENSION IF NOT EXISTS postgis_raster;"
-    psql --no-password -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -p 5433 -c "CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;"
+    # psql --no-password -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -p 5433 -c "CREATE EXTENSION IF NOT EXISTS postgis;"
+    # psql --no-password -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -p 5433 -c "CREATE EXTENSION IF NOT EXISTS hstore;"
+    # psql --no-password -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -p 5433 -c "CREATE EXTENSION IF NOT EXISTS pgrouting;"
+    # psql --no-password -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -p 5433 -c "CREATE EXTENSION IF NOT EXISTS postgis_raster;"
+    # psql --no-password -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -p 5433 -c "CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;"
     
     echo "Extensions created. Initialize osm2pgsql ..."
 
@@ -43,14 +56,13 @@ else
         -H "$PGHOST" \
         -d "$PGDATABASE" \
         -U "$PGUSER" \
-        -P 5433 \
+        -P "$PGPORT" \
         "$PBF"
 
     osm2pgsql-replication init \
         -H "$PGHOST" \
         -d "$PGDATABASE" \
         -U "$PGUSER" \
-        -P 5433 \
+        -P "$PGPORT" \
         --osm-file "$PBF"
-
 fi
