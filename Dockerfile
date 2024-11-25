@@ -21,10 +21,10 @@ RUN apk --no-cache add \
     postgresql-client
 
 RUN git clone -b 1.10.0 https://github.com/osm2pgsql-dev/osm2pgsql.git
-WORKDIR osm2pgsql
+WORKDIR /osm2pgsql
 
 RUN mkdir build
-WORKDIR build
+WORKDIR /osm2pgsql/build
 RUN cmake -D WITH_LUAJIT=ON ..
 RUN make
 RUN make install
@@ -54,10 +54,14 @@ RUN apk --no-cache add \
 
 COPY --from=builder /usr/local/bin/osm2pgsql* /usr/local/bin/
 COPY --from=builder /usr/local/share/osm2pgsql/*.style /usr/local/share/osm2pgsql/
-COPY ./custom.style /usr/local/share/osm2pgsql/
+COPY ./scripts/custom.style /usr/local/share/osm2pgsql/
 
 COPY --from=builder /venv /venv
 ENV PATH="/venv/bin:$PATH"
 
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+WORKDIR /root
+COPY ./scripts/osm-import.sh .
+COPY ./scripts/custom.style .
+RUN chmod +x osm-import.sh
+
+ENTRYPOINT [ "~/osm-import.sh" ]
