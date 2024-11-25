@@ -59,9 +59,9 @@ COPY ./scripts/custom.style /usr/local/share/osm2pgsql/
 COPY --from=builder /venv /venv
 ENV PATH="/venv/bin:$PATH"
 
-WORKDIR /root
+WORKDIR /osm
 COPY ./scripts/osm-import.sh .
 COPY ./scripts/custom.style .
 RUN chmod +x osm-import.sh
 
-ENTRYPOINT [ "~/osm-import.sh" ]
+ENTRYPOINT [ "/osm/osm-import.sh" ]
